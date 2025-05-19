@@ -18,7 +18,7 @@ public class Main {
         mostrarMenuPrincipal();
     }
 
-    // Inicializa el sistema con un admin por defecto
+    // Inicializa sistema con admin
     private static void inicializarSistema() {
         usuarios.add(new Administrador("admin", "admin123"));
     }
@@ -190,10 +190,10 @@ public class Main {
                 String nombre = consola.nextLine();
 
                 System.out.print("Precio: ");
-                double precio = Double.parseDouble(consola.nextLine());
+                double precio = Double.parseDouble(consola.nextLine().replace(",",".".trim()));
 
                 System.out.print("Stock: ");
-                int stock = Integer.parseInt(consola.nextLine());
+                int stock = Integer.parseInt(consola.nextLine().trim());
 
                 System.out.print("Tipo (1. Perecedero, 2. No perecedero): ");
                 int tipo = Integer.parseInt(consola.nextLine());

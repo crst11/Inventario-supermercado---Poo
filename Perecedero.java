@@ -14,14 +14,16 @@ class Perecedero extends Producto {
         this.fechaVencimiento = fechaVencimiento;
     }
 
-    public Perecedero(String nombre, Double precio, Integer stock) {
+    public Perecedero(
+            String nombre, Double precio, Integer stock) {
         super(nombre, precio, stock);
     }
 
 
     @Override
     public String toString() {
-        return super.toString() + " | Vence: " + fechaVencimiento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        return
+                super.toString() + " | Vence: " + fechaVencimiento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
     @Override

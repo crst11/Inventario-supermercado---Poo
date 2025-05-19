@@ -5,7 +5,6 @@ import java.util.Scanner;
 class Producto {
     private String nombre;
     private Double precio;
-
     private Integer stock;
 
     public Producto(String nombre, Double precio, Integer stock) {
@@ -32,7 +31,7 @@ class Producto {
         stock = Integer.parseInt(leerCampo(consola, "stock", String.valueOf(stock)));
     }
 
-    protected String leerCampo(Scanner consola, String campo, String actual) {
+    private String leerCampo(Scanner consola, String campo, String actual) {
         System.out.print("Nuevo " + campo + " (" + actual + "): ");
         String entrada = consola.nextLine();
         return entrada.isEmpty() ? actual : entrada;
