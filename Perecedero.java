@@ -1,11 +1,11 @@
 package Inventario;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.LocalDate;
 import java.util.Scanner;
 
-class Perecedero extends Producto {
+public class Perecedero extends Producto {
 
     private LocalDate fechaVencimiento;
 
@@ -14,16 +14,16 @@ class Perecedero extends Producto {
         this.fechaVencimiento = fechaVencimiento;
     }
 
-    public Perecedero(
-            String nombre, Double precio, Integer stock) {
-        super(nombre, precio, stock);
+    public boolean estaVencido() {
+        return fechaVencimiento.isBefore(LocalDate.now());
     }
-
 
     @Override
     public String toString() {
+        String vencido = estaVencido() ? " (VENCIDO)" : "";
         return
-                super.toString() + " | Vence: " + fechaVencimiento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                super.toString() + " | Vence: " +
+                fechaVencimiento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + vencido;
     }
 
     @Override
@@ -34,8 +34,12 @@ class Perecedero extends Producto {
         if (!entrada.isEmpty()) {
             try {
                 LocalDate nuevaFecha = LocalDate.parse(entrada, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                this.fechaVencimiento = nuevaFecha;
-            } catch (DateTimeParseException e) {
+                if (nuevaFecha.isBefore(LocalDate.now())) {
+                    System.out.println("Error: La fecha de vencimiento no puede ser anterior a hoy.");
+                } else {
+                    this.fechaVencimiento = nuevaFecha;
+                }
+            } catch (DateTimeParseException excepcion) {
                 System.out.println("Fecha inválida. Se mantiene la anterior.");
             }
         }
@@ -48,5 +52,4 @@ class Perecedero extends Producto {
     public void setFechaVencimiento(LocalDate fechaVencimiento) {
         this.fechaVencimiento = fechaVencimiento;
     }
-
 }

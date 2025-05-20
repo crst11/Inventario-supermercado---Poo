@@ -184,13 +184,14 @@ public class Main {
     private static void agregarProducto() {
         System.out.println("\n=== AGREGAR PRODUCTO ===");
 
-        while (true) {
+        while (true) { // Bucle para agregar múltiples productos
+
             try {
                 System.out.print("Nombre: ");
                 String nombre = consola.nextLine();
 
                 System.out.print("Precio: ");
-                double precio = Double.parseDouble(consola.nextLine().replace(",",".".trim()));
+                double precio = Double.parseDouble(consola.nextLine().replace(",", ".").trim());
 
                 System.out.print("Stock: ");
                 int stock = Integer.parseInt(consola.nextLine().trim());
@@ -199,36 +200,49 @@ public class Main {
                 int tipo = Integer.parseInt(consola.nextLine());
 
                 Producto producto;
+
                 if (tipo == 1) {
-                    System.out.print("Fecha vencimiento (dd/mm/aaaa): ");
-                    String fechaVencimientoStr = consola.nextLine();
-                    try {
-                        LocalDate fechaVencimiento = LocalDate.parse(fechaVencimientoStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                        producto = new Perecedero(nombre, precio, stock, fechaVencimiento);
-                    } catch (DateTimeParseException excepcionTiempo) {
-                        System.out.println("Formato de fecha inválido. Intente nuevamente.");
-                        return;
+                    LocalDate fechaVencimiento = null;
+                    DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                    while (true) {
+                        System.out.print("Fecha vencimiento (dd/MM/yyyy): ");
+                        String fecha = consola.nextLine();
+
+                        try {
+                            fechaVencimiento = LocalDate.parse(fecha, formato);
+
+                            if (fechaVencimiento.isBefore(LocalDate.now())) {
+                                System.out.println("Error: la fecha no puede ser anterior al día de hoy.");
+                            } else {
+                                break;
+                            }
+
+                        } catch (DateTimeParseException e) {
+                            System.out.println("Formato de fecha inválido. Use dd/MM/yyyy.");
+                        }
                     }
 
+                    producto = new Perecedero(nombre, precio, stock, fechaVencimiento);
                 } else {
                     producto = new Producto(nombre, precio, stock);
                 }
 
                 inventario.add(producto);
                 System.out.println("Producto agregado exitosamente!");
-                return;
 
-            } catch (NumberFormatException excepcionNumerica) {
+            } catch (NumberFormatException e) {
                 System.out.println("Error: Ingrese valores numéricos válidos para precio y stock.");
             }
 
-            System.out.print("¿Desea intentar nuevamente? (si/no): ");
-            String respuesta = consola.nextLine();
-            if (!respuesta.equalsIgnoreCase("si")) {
-                return;
+            System.out.print("¿Desea agregar otro producto? (si/no): ");
+            String continuar = consola.nextLine();
+            if (!continuar.equalsIgnoreCase("si")) {
+                return; // Sale del método y vuelve al menú anterior
             }
         }
     }
+
 
     private static void editarProducto() {
         System.out.println("\n=== EDITAR PRODUCTO ===");

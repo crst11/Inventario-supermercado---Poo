@@ -26,9 +26,29 @@ class Producto {
     }
 
     public void editar(Scanner consola) {
-        nombre = leerCampo(consola, "nombre", nombre);
-        precio = Double.parseDouble(leerCampo(consola, "precio", String.valueOf(precio)));
-        stock = Integer.parseInt(leerCampo(consola, "stock", String.valueOf(stock)));
+        System.out.print("Nuevo nombre (ENTER para mantener): ");
+        String nuevoNombre = consola.nextLine().trim();
+        if (!nuevoNombre.isEmpty()) nombre = nuevoNombre;
+
+        System.out.print("Nuevo precio (ENTER para mantener): ");
+        String precioStr = consola.nextLine().trim();
+        if (!precioStr.isEmpty()) {
+            try {
+                precio = Double.parseDouble(precioStr);
+            } catch (NumberFormatException e) {
+                System.out.println("Precio inválido.");
+            }
+        }
+
+        System.out.print("Nuevo stock (ENTER para mantener): ");
+        String stockStr = consola.nextLine().trim();
+        if (!stockStr.isEmpty()) {
+            try {
+                stock = Integer.parseInt(stockStr);
+            } catch (NumberFormatException e) {
+                System.out.println("Stock inválido.");
+            }
+        }
     }
 
     private String leerCampo(Scanner consola, String campo, String actual) {
