@@ -1,6 +1,6 @@
 package Inventario;
 
-class Empleado extends Usuario {
+public class Empleado extends Usuario {
 
     public Empleado(String usuario, String contraseña) {
         super(usuario, contraseña);
@@ -9,9 +9,8 @@ class Empleado extends Usuario {
     public Empleado(){
     }
 
-    @Override
     public void mostrarMenu() {
-        Main.mostrarMenuEmpleado();
+        getSistema().mostrarMenuEmpleado();
     }
 
     @Override

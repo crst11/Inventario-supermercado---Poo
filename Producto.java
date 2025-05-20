@@ -2,7 +2,7 @@ package Inventario;
 
 import java.util.Scanner;
 
-class Producto {
+public class Producto {
     private String nombre;
     private Double precio;
     private Integer stock;
