@@ -6,9 +6,6 @@ public class Empleado extends Usuario {
         super(usuario, contraseña);
     }
 
-    public Empleado(){
-    }
-
     public void mostrarMenu() {
         getSistema().mostrarMenuEmpleado();
     }

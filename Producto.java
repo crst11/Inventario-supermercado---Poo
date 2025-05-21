@@ -8,21 +8,9 @@ public class Producto {
     private Integer stock;
 
     public Producto(String nombre, Double precio, Integer stock) {
-        if (nombre == null || nombre.trim().isEmpty()) {
-            throw new IllegalArgumentException("El nombre no puede estar vacío");
-        }
-        if (precio <= 0) {
-            throw new IllegalArgumentException("El precio debe ser positivo");
-        }
-        if (stock < 0) {
-            throw new IllegalArgumentException("El stock no puede ser negativo");
-        }
         this.nombre = nombre;
         this.precio = precio;
         this.stock = stock;
-    }
-
-    public Producto() {
     }
 
     public void editar(Scanner consola) {
@@ -41,20 +29,14 @@ public class Producto {
         }
 
         System.out.print("Nuevo stock (ENTER para mantener): ");
-        String stockStr = consola.nextLine().trim();
-        if (!stockStr.isEmpty()) {
+        String stockString = consola.nextLine().trim();
+        if (!stockString.isEmpty()) {
             try {
-                stock = Integer.parseInt(stockStr);
+                stock = Integer.parseInt(stockString);
             } catch (NumberFormatException e) {
                 System.out.println("Stock inválido.");
             }
         }
-    }
-
-    private String leerCampo(Scanner consola, String campo, String actual) {
-        System.out.print("Nuevo " + campo + " (" + actual + "): ");
-        String entrada = consola.nextLine();
-        return entrada.isEmpty() ? actual : entrada;
     }
 
     @Override
@@ -67,31 +49,7 @@ public class Producto {
     }
 
     public void setNombre(String nombre) {
-        if (nombre == null || nombre.trim().isEmpty()) {
-            throw new IllegalArgumentException("El nombre no puede estar vacío");
-        }
         this.nombre = nombre;
     }
 
-    public double getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(double precio) {
-        if (precio <= 0) {
-            throw new IllegalArgumentException("El precio debe ser positivo");
-        }
-        this.precio = precio;
-    }
-
-    public int getStock() {
-        return stock;
-    }
-
-    public void setStock(int stock) {
-        if (stock < 0) {
-            throw new IllegalArgumentException("El stock no puede ser negativo");
-        }
-        this.stock = stock;
-    }
 }

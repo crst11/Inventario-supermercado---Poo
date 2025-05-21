@@ -24,7 +24,7 @@ public class SistemaSupermercado {
     }
 
     private void inicializarSistema() {
-        this.usuarios.add(new Administrador("admin", "admin123"));
+        usuarios.add(new Administrador("admin", "admin123"));
     }
 
     private void mostrarMenuPrincipal() {
@@ -35,20 +35,17 @@ public class SistemaSupermercado {
             System.out.print("Seleccione una opción: ");
 
             try {
-                int opcion = Integer.parseInt(consola.nextLine());
-
+                int opcion = Integer.parseInt(consola.nextLine().trim());
                 switch (opcion) {
-                    case 1:
-                        iniciarSesion();
-                        break;
-                    case 2:
+                    case 1 -> iniciarSesion();
+                    case 2 -> {
                         System.out.println("Saliendo del sistema...");
                         return;
-                    default:
-                        System.out.println("Opción inválida. Intente nuevamente.");
+                    }
+                    default -> System.out.println("Opción inválida. Intente nuevamente.");
                 }
-            } catch (NumberFormatException excepcionNumerica) {
-                System.out.println("Error ingrese un número.");
+            } catch (NumberFormatException excepcion) {
+                System.out.println("Error: Ingrese un número válido.");
             }
         }
     }
@@ -63,16 +60,49 @@ public class SistemaSupermercado {
     }
 
     private String leerEntradaNoVacia(String mensaje) {
-        String entrada;
-        do {
+        while (true) {
             System.out.print(mensaje);
-            entrada = consola.nextLine().trim();
-            if (entrada.isEmpty()) {
-                System.out.println("Este campo no puede estar vacío.");
+            String entrada = consola.nextLine().trim();
+            if (!entrada.isEmpty()) {
+                return entrada;
             }
-        } while (entrada.isEmpty());
-        return entrada;
+            System.out.println("Este campo no puede estar vacío.");
+        }
     }
+
+    private int leerEnteroNoVacio(String mensaje, String mensajeError, int valorMinimo) {
+        while (true) {
+            String entrada = leerEntradaNoVacia(mensaje);
+            try {
+                int numero = Integer.parseInt(entrada);
+                if (numero < valorMinimo) {
+                    System.out.println(mensajeError);
+                } else {
+                    return numero;
+                }
+            } catch (NumberFormatException excepcion) {
+                System.out.println("Error: Ingrese un número entero válido.");
+            }
+        }
+    }
+
+    private double leerDoubleNoVacio(String mensaje, String mensajeError, double valorMinimo) {
+        while (true) {
+            String entrada = leerEntradaNoVacia(mensaje);
+            try {
+
+                double numero = Double.parseDouble(entrada.replace(",", "."));
+                if (numero < valorMinimo) {
+                    System.out.println(mensajeError);
+                } else {
+                    return numero;
+                }
+            } catch (NumberFormatException excepcion) {
+                System.out.println("Error: Ingrese un valor numérico válido (ej. 10.50).");
+            }
+        }
+    }
+
 
     private void iniciarSesion() {
         System.out.println("\n=== INICIO DE SESIÓN ===");
@@ -94,6 +124,9 @@ public class SistemaSupermercado {
                 return;
             } else {
                 System.out.println("Datos incorrectas. Intente nuevamente o presione 0 para volver.");
+                System.out.print("¿Desea intentar nuevamente? (si/0): ");
+                String respuesta = consola.nextLine().trim();
+                if (respuesta.equals("0")) return;
             }
         }
     }
@@ -110,24 +143,16 @@ public class SistemaSupermercado {
 
             try {
                 int opcion = Integer.parseInt(consola.nextLine());
-
                 switch (opcion) {
-                    case 1:
-                        gestionarProductos();
-                        break;
-                    case 2:
-                        gestionarEmpleados();
-                        break;
-                    case 3:
-                        gestionarAdministradores();
-                        break;
-                    case 4:
+                    case 1 -> gestionarProductos();
+                    case 2 -> gestionarEmpleados();
+                    case 3 -> gestionarAdministradores();
+                    case 4 -> {
                         usuarioActual = null;
                         return;
-                    default:
-                        System.out.println("Opción inválida. Intente nuevamente.");
+                    }
+                    default -> System.out.println("Opción inválida.");
                 }
-
             } catch (NumberFormatException excepcionNumerica) {
                 System.out.println("Error: Debe ingresar un número.");
             }
@@ -145,26 +170,20 @@ public class SistemaSupermercado {
 
             try {
                 int opcion = Integer.parseInt(consola.nextLine());
-
                 switch (opcion) {
-                    case 1:
-                        verInventario();
-                        break;
-                    case 2:
-                        buscarProducto();
-                        break;
-                    case 3:
+                    case 1 -> verInventario();
+                    case 2 -> buscarProducto();
+                    case 3 -> {
                         usuarioActual = null;
                         return;
-                    default:
-                        System.out.println("Opción inválida. Intente nuevamente.");
+                    }
+                    default -> System.out.println("Opción inválida.");
                 }
             } catch (NumberFormatException excepciionNumerica) {
                 System.out.println("Error: Debe ingresar un número.");
             }
         }
     }
-
 
     private void gestionarProductos() {
         while (true) {
@@ -178,24 +197,13 @@ public class SistemaSupermercado {
 
             try {
                 int opcion = Integer.parseInt(consola.nextLine());
-
                 switch (opcion) {
-                    case 1:
-                        agregarProducto();
-                        break;
-                    case 2:
-                        editarProducto();
-                        break;
-                    case 3:
-                        eliminarProducto();
-                        break;
-                    case 4:
-                        verInventario();
-                        break;
-                    case 5:
-                        return;
-                    default:
-                        System.out.println("Opción inválida. Intente nuevamente.");
+                    case 1 -> agregarProducto();
+                    case 2 -> editarProducto();
+                    case 3 -> eliminarProducto();
+                    case 4 -> verInventario();
+                    case 5 -> { return; }
+                    default -> System.out.println("Opción inválida.");
                 }
             } catch (NumberFormatException excepcionNumerica) {
                 System.out.println("Error: Debe ingresar un número.");
@@ -203,66 +211,100 @@ public class SistemaSupermercado {
         }
     }
 
+    private Producto buscarProductoPorNombre(String nombre) {
+        String nombreBuscado = nombre.trim().toLowerCase();
+        for (Producto producto : inventario) {
+            if (producto.getNombre().toLowerCase().equals(nombreBuscado)) {
+                return producto;
+            }
+        }
+        return null;
+    }
+
     private void agregarProducto() {
         System.out.println("\n=== AGREGAR PRODUCTO ===");
 
         while (true) {
-            try {
-                String nombre = leerEntradaNoVacia("Nombre: ");
+            String nombre = leerEntradaNoVacia("Nombre: ");
 
-                System.out.print("Precio: ");
-                double precio = Double.parseDouble(consola.nextLine().replace(",", ".").trim());
+            Producto productoExistente = buscarProductoPorNombre(nombre);
+            if (productoExistente != null) {
+                System.out.println("Ya existe un producto con el nombre '" + nombre + "':");
+                System.out.println(productoExistente.toString());
+                System.out.print("¿Desea editar este producto en su lugar? (si/no): ");
+                String respuestaEdicion = consola.nextLine().trim().toLowerCase();
 
-                System.out.print("Stock: ");
-                int stock = Integer.parseInt(consola.nextLine().trim());
-
-                System.out.print("Tipo (1. Perecedero, 2. No perecedero): ");
-                int tipo = Integer.parseInt(consola.nextLine());
-
-                Producto producto;
-
-                if (tipo == 1) {
-                    LocalDate fechaVencimiento;
-                    DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-                    while (true) {
-                        System.out.print("Fecha vencimiento (dd/MM/yyyy): ");
-                        String fecha = consola.nextLine();
-
-                        try {
-                            fechaVencimiento = LocalDate.parse(fecha, formato);
-
-                            if (fechaVencimiento.isBefore(LocalDate.now())) {
-                                System.out.println("Error: la fecha no puede ser anterior al día de hoy.");
-                            } else {
-                                break;
-                            }
-
-                        } catch (DateTimeParseException e) {
-                            System.out.println("Formato de fecha inválido. Use dd/MM/yyyy.");
-                        }
+                if (respuestaEdicion.equals("si")) {
+                    System.out.println("\n--- Editando producto existente ---");
+                    productoExistente.editar(consola);
+                    System.out.println("Producto '" + nombre + "' actualizado exitosamente.");
+                    System.out.print("¿Desea agregar otro producto? (si/no): ");
+                    String respuestaSeguirAgregando = consola.nextLine().trim().toLowerCase();
+                    if (!respuestaSeguirAgregando.equals("si")) {
+                        return;
+                    } else {
+                        continue;
                     }
-
-                    producto = new Perecedero(nombre, precio, stock, fechaVencimiento);
                 } else {
-                    producto = new Producto(nombre, precio, stock);
+                    System.out.println("Operación de agregar cancelada para este nombre. Intente con un nombre diferente si desea agregar uno nuevo.");
+                    System.out.print("¿Desea agregar otro producto con un nombre diferente? (si/no): ");
+                    String respuestaOtroProducto = consola.nextLine().trim().toLowerCase();
+                    if (!respuestaOtroProducto.equals("si")) {
+                        return;
+                    } else {
+                        continue;
+                    }
                 }
-
-                inventario.add(producto);
-                System.out.println("Producto agregado exitosamente!");
-
-            } catch (NumberFormatException e) {
-                System.out.println("Error: Ingrese valores numéricos válidos para precio y stock.");
             }
 
+            double precio = leerDoubleNoVacio("Precio: ", "El precio debe ser mayor que 0.", 0.01);
+
+            int stock = leerEnteroNoVacio("Stock: ", "El stock debe ser mayor que 0.", 1);
+
+            int tipo = leerEnteroNoVacio("Tipo (1. Perecedero, 2. No perecedero): ", "Seleccione una opción válida (1 o 2).", 1);
+            while (tipo != 1 && tipo != 2) {
+                tipo = leerEnteroNoVacio("Seleccione una opción válida (1. Perecedero, 2. No perecedero): ", "Seleccione una opción válida (1 o 2).", 1);
+            }
+
+            Producto producto;
+
+            if (tipo == 1) {
+                LocalDate fechaVencimiento;
+                DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                while (true) {
+                    System.out.print("Fecha vencimiento (dd/MM/yyyy): ");
+                    String entradaFecha = consola.nextLine().trim();
+                    if (entradaFecha.isEmpty()) {
+                        System.out.println("La fecha de vencimiento no puede estar vacía.");
+                        continue;
+                    }
+                    try {
+                        fechaVencimiento = LocalDate.parse(entradaFecha, formato);
+                        if (fechaVencimiento.isBefore(LocalDate.now())) {
+                            System.out.println("La fecha no puede ser anterior al día de hoy.");
+                        } else {
+                            break;
+                        }
+                    } catch (DateTimeParseException excepcion) {
+                        System.out.println("Formato de fecha inválido. Use dd/MM/yyyy.");
+                    }
+                }
+                producto = new Perecedero(nombre, precio, stock, fechaVencimiento);
+            } else {
+                producto = new Producto(nombre, precio, stock);
+            }
+
+            inventario.add(producto);
+            System.out.println("¡Producto agregado exitosamente!");
+
             System.out.print("¿Desea agregar otro producto? (si/no): ");
-            String continuar = consola.nextLine();
-            if (!continuar.equalsIgnoreCase("si")) {
+            String respuesta = consola.nextLine().trim().toLowerCase();
+            if (!respuesta.equals("si")) {
                 return;
             }
         }
     }
-
 
     private void editarProducto() {
         System.out.println("\n=== EDITAR PRODUCTO ===");
@@ -270,23 +312,16 @@ public class SistemaSupermercado {
 
         if (inventario.isEmpty()) return;
 
-        try {
-            System.out.print("Ingrese el número del producto a editar (0 para cancelar): ");
-            int indice = Integer.parseInt(consola.nextLine()) - 1;
+        int indice = leerEnteroNoVacio("Ingrese el número del producto a editar (0 para cancelar): ", "Número inválido. Ingrese un número positivo.", 0) - 1;
 
-            if (indice == -1) return;
-            if (indice < 0 || indice >= inventario.size()) {
-                System.out.println("Número inválido.");
-                return;
-            }
+        if (indice == -1) return;
 
-            Producto producto = inventario.get(indice);
-            producto.editar(consola);
-            System.out.println("Producto actualizado correctamente.");
-
-        } catch (NumberFormatException e) {
-            System.out.println("Entrada inválida.");
+        if (indice < 0 || indice >= inventario.size()) {
+            System.out.println("Número de producto fuera de rango.");
+            return;
         }
+        inventario.get(indice).editar(consola);
+        System.out.println("Producto actualizado correctamente.");
     }
 
     private void eliminarProducto() {
@@ -296,21 +331,16 @@ public class SistemaSupermercado {
         if (inventario.isEmpty()) return;
 
         while (true) {
-            try {
-                System.out.print("Ingrese el número del producto a eliminar (0 para cancelar): ");
-                int indice = Integer.parseInt(consola.nextLine()) - 1;
+            int indice = leerEnteroNoVacio("Ingrese el número del producto a eliminar (0 para cancelar): ", "Número inválido. Ingrese un número positivo.", 0) - 1;
 
-                if (indice == -1) return;
-                if (indice < 0 || indice >= inventario.size()) {
-                    System.out.println("Número de producto inválido.");
-                    continue;
-                }
+            if (indice == -1) return;
 
-                Producto producto = inventario.remove(indice);
-                System.out.println("Producto '" + producto.getNombre() + "' eliminado.");
+            if (indice >= 0 && indice < inventario.size()) {
+                Producto eliminado = inventario.remove(indice);
+                System.out.println("Producto '" + eliminado.getNombre() + "' eliminado.");
                 return;
-            } catch (NumberFormatException e) {
-                System.out.println("Error: Ingrese un número válido.");
+            } else {
+                System.out.println("Número inválido o producto no encontrado.");
             }
 
             System.out.print("¿Desea intentar nuevamente? (s/n): ");
@@ -391,34 +421,16 @@ public class SistemaSupermercado {
         while (true) {
             String usuario;
             while (true) {
-                System.out.print("Nombre de usuario: ");
-                usuario = consola.nextLine().trim().toLowerCase();
-
-                if (usuario.isEmpty()) {
-                    System.out.println("El nombre de usuario no puede estar vacío.");
-                    continue;
-                }
+                usuario = leerEntradaNoVacia("Nombre de usuario: ");
 
                 if (usuarioExiste(usuario)) {
                     System.out.println("El usuario ya existe.");
                     continue;
                 }
-
                 break;
             }
 
-            String contraseña;
-            while (true) {
-                System.out.print("Contraseña: ");
-                contraseña = consola.nextLine().trim();
-
-                if (contraseña.isEmpty()) {
-                    System.out.println("La contraseña no puede estar vacía.");
-                    continue;
-                }
-
-                break;
-            }
+            String contraseña = leerEntradaNoVacia("Contraseña: ");
 
             usuarios.add(new Empleado(usuario, contraseña));
             System.out.println("Empleado agregado exitosamente!");
@@ -462,25 +474,30 @@ public class SistemaSupermercado {
     private void eliminarEmpleado() {
         listarEmpleados();
 
-        if (usuarios.size() <= 1)
+        if (usuarios.stream().noneMatch(u -> u.getClass().getSimpleName().equals("Empleado"))) {
+            System.out.println("No hay empleados para eliminar.");
             return;
+        }
 
         while (true) {
-            try {
-                System.out.print("Ingrese el número del empleado a eliminar (0 para cancelar): ");
-                int indice = Integer.parseInt(consola.nextLine());
+            int indice = leerEnteroNoVacio("Ingrese el número del empleado a eliminar (0 para cancelar): ", "Número de empleado inválido.", 0);
 
-                if (indice == 0) return;
-                if (indice < 1 || indice >= usuarios.size()) {
-                    System.out.println("Número de empleado inválido.");
-                    continue;
+            if (indice == 0) return;
+
+            ArrayList<Usuario> soloEmpleados = new ArrayList<>();
+            for (Usuario u : usuarios) {
+                if (u.getClass().getSimpleName().equals("Empleado")) {
+                    soloEmpleados.add(u);
                 }
+            }
 
-                Usuario empleado = usuarios.remove(indice);
-                System.out.println("Empleado '" + empleado.getUsuario() + "' eliminado.");
+            if (indice > 0 && indice <= soloEmpleados.size()) {
+                Usuario empleadoAEliminar = soloEmpleados.get(indice - 1);
+                usuarios.remove(empleadoAEliminar);
+                System.out.println("Empleado '" + empleadoAEliminar.getUsuario() + "' eliminado.");
                 return;
-            } catch (NumberFormatException e) {
-                System.out.println("Error: Ingrese un número válido.");
+            } else {
+                System.out.println("Número de empleado inválido.");
             }
 
             System.out.print("¿Desea intentar nuevamente? (si/no): ");
@@ -530,32 +547,16 @@ public class SistemaSupermercado {
         while (true) {
             String usuario;
             while (true) {
-                System.out.print("Nombre de usuario: ");
-                usuario = consola.nextLine().trim().toLowerCase();
-
-                if (usuario.isEmpty()) {
-                    System.out.println("El nombre no puede estar vacío.");
-                    continue;
-                }
+                usuario = leerEntradaNoVacia("Nombre de usuario: ");
 
                 if (usuarioExiste(usuario)) {
                     System.out.println("Ese nombre de usuario ya existe.");
                     continue;
                 }
-
                 break;
             }
 
-            String contraseña;
-            while (true) {
-                System.out.print("Contraseña: ");
-                contraseña = consola.nextLine().trim();
-                if (contraseña.isEmpty()) {
-                    System.out.println("La contraseña no puede estar vacía.");
-                    continue;
-                }
-                break;
-            }
+            String contraseña = leerEntradaNoVacia("Contraseña: ");
 
             usuarios.add(new Administrador(usuario, contraseña));
             System.out.println("Administrador agregado exitosamente.");
@@ -588,40 +589,35 @@ public class SistemaSupermercado {
     private void eliminarAdministrador() {
         System.out.println("\n=== ELIMINAR ADMINISTRADOR ===");
 
-        ArrayList<Usuario> admins = new ArrayList<>();
+        ArrayList<Usuario> adminsEliminables = new ArrayList<>();
         for (Usuario usuario : usuarios) {
             if (usuario.getClass().getSimpleName().equals("Administrador") && !usuario.getUsuario().equals("admin")) {
-                admins.add(usuario);
+                adminsEliminables.add(usuario);
             }
         }
 
-        if (admins.isEmpty()) {
+        if (adminsEliminables.isEmpty()) {
             System.out.println("No hay administradores eliminables.");
             return;
         }
 
-        for (int i = 0; i < admins.size(); i++) {
-            System.out.println((i + 1) + ". " + admins.get(i).getUsuario());
+        for (int i = 0; i < adminsEliminables.size(); i++) {
+            System.out.println((i + 1) + ". " + adminsEliminables.get(i).getUsuario());
         }
 
         while (true) {
-            try {
-                System.out.print("Seleccione el número del administrador a eliminar (0 para cancelar): ");
-                int seleccion = Integer.parseInt(consola.nextLine());
+            int seleccion = leerEnteroNoVacio("Seleccione el número del administrador a eliminar (0 para cancelar): ", "Selección inválida.", 0);
 
-                if (seleccion == 0) return;
-                if (seleccion < 1 || seleccion > admins.size()) {
-                    System.out.println("Selección inválida.");
-                    continue;
-                }
-
-                Usuario adminAEliminar = admins.get(seleccion - 1);
-                usuarios.remove(adminAEliminar);
-                System.out.println("Administrador eliminado correctamente.");
-                return;
-            } catch (NumberFormatException excepcion) {
-                System.out.println("Entrada inválida.");
+            if (seleccion == 0) return;
+            if (seleccion < 1 || seleccion > adminsEliminables.size()) {
+                System.out.println("Selección inválida.");
+                continue;
             }
+
+            Usuario adminAEliminar = adminsEliminables.get(seleccion - 1);
+            usuarios.remove(adminAEliminar);
+            System.out.println("Administrador eliminado correctamente.");
+            return;
         }
     }
 }

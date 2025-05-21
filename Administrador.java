@@ -6,9 +6,6 @@ public class Administrador extends Usuario {
         super(usuario, contraseña);
     }
 
-    public Administrador(){
-    }
-
     @Override
     public boolean esAdmin() {
         return true;

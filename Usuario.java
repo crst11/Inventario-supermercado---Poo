@@ -27,15 +27,6 @@ abstract class Usuario {
         return contraseña;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
-    }
-
-    public void setContrasena(String contrasena) {
-        this.contraseña = contrasena;
-    }
-
-
     public SistemaSupermercado getSistema() {
         return sistema;
     }
