@@ -9,8 +9,9 @@ import java.util.Scanner;
 public class SistemaSupermercado {
     private ArrayList<Usuario> usuarios = new ArrayList<>();
     private ArrayList<Producto> inventario = new ArrayList<>();
-    private Usuario usuarioActual = null;
-    private Scanner consola = new Scanner(System.in);
+    private Usuario usuarioActual;
+
+    Scanner consola = new Scanner(System.in);
 
     public SistemaSupermercado() {
         inicializarSistema();
@@ -618,7 +619,7 @@ public class SistemaSupermercado {
                 usuarios.remove(adminAEliminar);
                 System.out.println("Administrador eliminado correctamente.");
                 return;
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException excepcion) {
                 System.out.println("Entrada inválida.");
             }
         }
