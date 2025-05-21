@@ -1,6 +1,6 @@
 package Inventario;
 
-abstract class Usuario {
+public abstract class Usuario {
 
     private String usuario;
     private String contraseña;
@@ -9,9 +9,6 @@ abstract class Usuario {
     public Usuario(String usuario, String contrasena) {
         this.usuario = usuario;
         this.contraseña = contrasena;
-    }
-
-    public Usuario() {
     }
 
     protected void mostrarMenu(){
