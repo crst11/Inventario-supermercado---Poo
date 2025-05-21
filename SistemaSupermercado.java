@@ -11,7 +11,7 @@ public class SistemaSupermercado {
     private ArrayList<Producto> inventario = new ArrayList<>();
     private Usuario usuarioActual;
 
-    Scanner consola = new Scanner(System.in);
+    static Scanner consola = new Scanner(System.in);
 
     public SistemaSupermercado() {
         inicializarSistema();
