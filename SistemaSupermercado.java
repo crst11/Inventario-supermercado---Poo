@@ -409,7 +409,7 @@ public class SistemaSupermercado {
         while (true) {
             String usuario;
             while (true) {
-                usuario = leerEntradaNoVacia("Nombre de usuario: ");
+                usuario = leerEntradaNoVacia("Nombre de usuario: ").toLowerCase();
 
                 if (usuarioExiste(usuario)) {
                     System.out.println("El usuario ya existe.");
