@@ -8,6 +8,7 @@ import java.util.Scanner;
 public class Perecedero extends Producto {
 
     private LocalDate fechaVencimiento;
+    private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public Perecedero(String nombre, double precio, int stock, LocalDate fechaVencimiento) {
         super(nombre, precio, stock);
@@ -43,5 +44,10 @@ public class Perecedero extends Producto {
                 System.out.println("Fecha inválida. Se mantiene la anterior.");
             }
         }
+    }
+
+    @Override
+    public String toCsvString() {
+        return "PERECEDERO," + getNombre() + "," + getPrecio() + "," + getStock() + "," + fechaVencimiento.format(FORMATO_FECHA);
     }
 }

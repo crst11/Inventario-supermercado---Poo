@@ -39,6 +39,10 @@ public class Producto {
         }
     }
 
+    public String toCsvString() {
+        return "NO_PERECEDERO," + nombre + "," + precio + "," + stock;
+    }
+
     @Override
     public String toString() {
         return String.format("%s - Precio: $%.2f - Stock: %d", nombre, precio, stock);
@@ -50,6 +54,22 @@ public class Producto {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public Double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(Double precio) {
+        this.precio = precio;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
     }
 
 }
