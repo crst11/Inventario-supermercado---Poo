@@ -31,5 +31,4 @@ public abstract class Usuario {
     public void setSistema(SistemaSupermercado sistema) {
         this.sistema = sistema;
     }
-
 }
