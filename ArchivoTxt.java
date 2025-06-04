@@ -19,7 +19,6 @@ public class ArchivoTxt {
                 if (!archivoUsuarios.exists()) {
                     archivoUsuarios.createNewFile();
                 }
-                // Asegura que el archivo de inventario exista. Si no, lo crea.
                 if (!archivoInventario.exists()) {
                     archivoInventario.createNewFile();
                 }
@@ -32,7 +31,7 @@ public class ArchivoTxt {
             List<Usuario> usuariosActuales = listarUsuarios();
 
             if (usuariosActuales.stream().anyMatch(u -> u.getUsuario().equalsIgnoreCase(nombre))) {
-                return;
+                System.out.println(" ");
             }
 
             if (rol.equalsIgnoreCase("ADMIN")) {

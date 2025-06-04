@@ -90,7 +90,7 @@ public class SistemaSupermercado {
             System.out.print("Seleccione una opción: ");
 
             try {
-                int opcion = Integer.parseInt(consola.nextLine().trim()); // Lee la línea completa
+                int opcion = Integer.parseInt(consola.nextLine().trim());
                 switch (opcion) {
                     case 1 -> iniciarSesion();
                     case 2 -> {
