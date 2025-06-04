@@ -32,7 +32,7 @@ public class ArchivoTxt {
             List<Usuario> usuariosActuales = listarUsuarios();
 
             if (usuariosActuales.stream().anyMatch(u -> u.getUsuario().equalsIgnoreCase(nombre))) {
-                System.out.println(" ");
+                return;
             }
 
             if (rol.equalsIgnoreCase("ADMIN")) {

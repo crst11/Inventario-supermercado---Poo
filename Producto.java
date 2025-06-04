@@ -68,8 +68,5 @@ public class Producto {
         return stock;
     }
 
-    public void setStock(Integer stock) {
-        this.stock = stock;
-    }
 
 }

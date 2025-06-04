@@ -5,11 +5,13 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.List;
 
 public class SistemaSupermercado {
-    private final ArrayList<Usuario> usuarios = new ArrayList<>();
-    private final ArrayList<Producto> inventario = new ArrayList<>();
+    private List<Usuario> usuarios = new ArrayList<>();
+    private List<Producto> inventario = new ArrayList<>();
     private Usuario usuarioActual;
+    private final ArchivoTxt.archivoTxt archivoTxt = new ArchivoTxt.archivoTxt();
 
     static Scanner consola = new Scanner(System.in);
 
@@ -62,20 +64,25 @@ public class SistemaSupermercado {
         }
     }
 
-    private Usuario validarDatos(String usuario, String contraseña) {
-        for (Usuario usuarioIngreasdo : usuarios) {
-            if (usuarioIngreasdo.getUsuario().equals(usuario) && usuarioIngreasdo.getContrasena().equals(contraseña)) {
-                return usuarioIngreasdo;
-            }
+    void inicializarSistema() {
+        usuarios = archivoTxt.listarUsuarios();
+
+        if (usuarios.isEmpty()) {
+            archivoTxt.agregarUsuario("admin", "admin123", "ADMIN");
+
+            usuarios = archivoTxt.listarUsuarios();
+            System.out.println("Administrador por defecto 'admin' con contraseña 'admin123' creado y guardado.");
         }
-        return null;
+
+        inventario = archivoTxt.listarProductos();
+        if (inventario.isEmpty()) {
+            System.out.println("Inventario cargado vacío o archivo no encontrado. Comienza con inventario vacío.");
+        } else {
+            System.out.println("Inventario cargado con " + inventario.size() + " productos.");
+        }
     }
 
-    private void inicializarSistema() {
-        usuarios.add(new Administrador("admin", "admin123"));
-    }
-
-    private void mostrarMenuPrincipal() {
+    void mostrarMenuPrincipal() {
         while (true) {
             System.out.println("\n=== SISTEMA DE SUPERMERCADO ===");
             System.out.println("1. Iniciar sesión");
@@ -83,7 +90,7 @@ public class SistemaSupermercado {
             System.out.print("Seleccione una opción: ");
 
             try {
-                int opcion = Integer.parseInt(consola.nextLine().trim());
+                int opcion = Integer.parseInt(consola.nextLine().trim()); // Lee la línea completa
                 switch (opcion) {
                     case 1 -> iniciarSesion();
                     case 2 -> {
@@ -93,10 +100,11 @@ public class SistemaSupermercado {
                     default -> System.out.println("Opción inválida. Intente nuevamente.");
                 }
             } catch (NumberFormatException excepcion) {
-                System.out.println("Error: Ingrese un número válido.");
+                System.out.println("Error: Ingrese un número válido para la opción.");
             }
         }
     }
+
 
     private void iniciarSesion() {
         System.out.println("\n=== INICIO DE SESIÓN ===");
@@ -109,7 +117,7 @@ public class SistemaSupermercado {
             System.out.print("Contraseña: ");
             String contrasena = consola.nextLine().trim();
 
-            usuarioActual = validarDatos(usuario, contrasena);
+            usuarioActual = archivoTxt.buscarUsuario(usuario, contrasena);
 
             if (usuarioActual != null) {
                 usuarioActual.setSistema(this);
@@ -125,7 +133,6 @@ public class SistemaSupermercado {
         }
     }
 
-    //Menu de administradores
     public void mostrarMenuAdministrador() {
         while (true) {
             System.out.println("\n=== MENÚ ADMINISTRADOR ===");
@@ -152,8 +159,7 @@ public class SistemaSupermercado {
             }
         }
     }
-
-    // Menú para empleados
+    
     public void mostrarMenuEmpleado() {
         while (true) {
             System.out.println("\n=== MENÚ EMPLEADO ===");
@@ -231,6 +237,7 @@ public class SistemaSupermercado {
                 if (respuestaEdicion.equals("si")) {
                     System.out.println("\n--- Editando producto existente ---");
                     productoExistente.editar(consola);
+                    archivoTxt.guardarProductos(inventario);
                     System.out.println("Producto '" + nombre + "' actualizado exitosamente.");
                     System.out.print("¿Desea agregar otro producto? (si/no): ");
                     String respuestaSeguirAgregando = consola.nextLine().trim().toLowerCase();
@@ -289,6 +296,7 @@ public class SistemaSupermercado {
             }
 
             inventario.add(producto);
+            archivoTxt.guardarProductos(inventario);
             System.out.println("¡Producto agregado exitosamente!");
 
             System.out.print("¿Desea agregar otro producto? (si/no): ");
@@ -314,6 +322,7 @@ public class SistemaSupermercado {
             return;
         }
         inventario.get(indice).editar(consola);
+        archivoTxt.guardarProductos(inventario);
         System.out.println("Producto actualizado correctamente.");
     }
 
@@ -330,6 +339,7 @@ public class SistemaSupermercado {
 
             if (indice >= 0 && indice < inventario.size()) {
                 Producto eliminado = inventario.remove(indice);
+                archivoTxt.guardarProductos(inventario);
                 System.out.println("Producto '" + eliminado.getNombre() + "' eliminado.");
                 return;
             } else {
@@ -420,6 +430,7 @@ public class SistemaSupermercado {
 
             String contraseña = leerEntradaNoVacia("Contraseña: ");
 
+            archivoTxt.agregarUsuario(usuario, contraseña, "EMPLEADO");
             usuarios.add(new Empleado(usuario, contraseña));
             System.out.println("Empleado agregado exitosamente!");
 
@@ -482,6 +493,7 @@ public class SistemaSupermercado {
             if (indice > 0 && indice <= soloEmpleados.size()) {
                 Usuario empleadoAEliminar = soloEmpleados.get(indice - 1);
                 usuarios.remove(empleadoAEliminar);
+                archivoTxt.guardarUsuarios(usuarios);
                 System.out.println("Empleado '" + empleadoAEliminar.getUsuario() + "' eliminado.");
                 return;
             } else {
@@ -540,6 +552,7 @@ public class SistemaSupermercado {
 
             String contraseña = leerEntradaNoVacia("Contraseña: ");
 
+            archivoTxt.agregarUsuario(usuario, contraseña, "ADMIN");
             usuarios.add(new Administrador(usuario, contraseña));
             System.out.println("Administrador agregado exitosamente.");
 
@@ -598,6 +611,7 @@ public class SistemaSupermercado {
 
             Usuario adminAEliminar = adminsEliminables.get(seleccion - 1);
             usuarios.remove(adminAEliminar);
+            archivoTxt.guardarUsuarios(usuarios);
             System.out.println("Administrador eliminado correctamente.");
             return;
         }
